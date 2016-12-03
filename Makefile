@@ -17,7 +17,8 @@ FUNC0		=	push_swap.c
 FUNC1		=	checker.c
 
 FUNCS		+=	sorting.c\
-				psw_op.c
+				psw_op.c\
+				add_check.c
 
 LIBFT		=	./libft/libft.a
 LIBINC		=	-I./libft

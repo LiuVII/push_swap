@@ -10,20 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include "libft.h"
-
-/*
-**Still need error checker for input: numbers, out of integer range
-*/
-
-int		ft_strcheck(char *str)
-{
-	if (str)
-		return (1);
-	return (0);
-}
+#include "push_swap.h"
 
 int		*ft_atoi_tab(char **tab, int *len)
 {
@@ -68,7 +55,7 @@ void	ft_rot(int *a, int n, int shift)
 	int	i;
 	int	tmp;
 
-	if (shift == 0)
+	if (shift == 0 || n < 2)
 		return ;
 	if (shift == 1)
 	{
@@ -94,11 +81,14 @@ void	ft_rot(int *a, int n, int shift)
 
 void	ft_push(int *a, int *b, int *n, int *m)
 {
-	ft_rot(b, *m, 1);
-	b[*m] = b[0];
-	b[0] = a[0];
-	(*m)++;
-	ft_rot(a, *n, 1);
-	(*n)--;	
-	a[*n] = 0;
+	if (*n > 0)
+	{
+		ft_rot(b, *m, 1);
+		b[*m] = b[0];
+		b[0] = a[0];
+		(*m)++;
+		ft_rot(a, *n, 1);
+		(*n)--;	
+		a[*n] = 0;
+	}
 }

@@ -10,13 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include "libft.h"
-#define MALLOC_G(x, y) ((!x) ? {return (y);} : 0)
-
-int		ft_sort(int *a, int *b, int *r, int n);
-int		*ft_atoi_tab(char **tab, int *len);
+#include "push_swap.h"
 
 /*
 **convert array to natural numbers permutations
@@ -57,35 +51,49 @@ int		*ft_fillrank(int *arr, int n)
 	return (0);
 }
 
+void	ft_lstprint(t_list *list)
+{
+	while (list)
+	{
+		(list->content) ? ft_putstr(list->content) : 0;
+		ft_putstr("\n");
+		list = list->next;
+	}
+}
+
 int		main(int argc, char **argv)
 {
-	int		*arr;
-	int		*brr;
+	int		*a[2];
 	int		*rtab;
-	int		n;
+	int		n[2];
 	int		i;
+	t_list	*list;
 
 	if ((i = -1) && argc < 2)
 		return (0);
-	n = 0;
+	n[0] = 0;
 	rtab = NULL;
-	arr = ft_atoi_tab(ft_strsplit(argv[1], ' '), &n);
+	a[0] = ft_atoi_tab(ft_strsplit(argv[1], ' '), &n[0]);
 	// printf("%d\n", n);
-	if (!(arr = ft_arr_simpl(arr, n))
-		|| !(rtab = ft_fillrank(arr, n))
-		|| !(brr = (int*)malloc(sizeof(int) * n)))
+	if (!(a[0] = ft_arr_simpl(a[0], n[0]))
+		|| !(rtab = ft_fillrank(a[0], n[0]))
+		|| !(a[1] = (int*)malloc(sizeof(int) * n[0])))
 	{
-		(arr) ? free(arr) : 0;
+		(a[0]) ? free(a[0]) : 0;
 		(rtab) ? free(rtab) : 0;
 		ft_putstr_fd("Error\n", 2);
 		return (-1);
-	}		
-	printf("Op num: %d\n",ft_sort(arr, brr, rtab, n));
-	while (++i < n)
-		printf("%d ", arr[i]);
+	}
+	list = NULL;
+	n[1] = 0;
+	printf("Op num: %d\n",ft_brute_sort(a, n, 0, -1, &list));
+	ft_lstprint(list);
+	ft_lstclr(&list);
+	while (++i < n[0])
+		printf("%d ", a[0][i]);
 	printf("\n");
-	free(arr);
+	free(a[0]);
 	free(rtab);
-	free(brr);
+	free(a[1]);
 	return (0);
 }
