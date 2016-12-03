@@ -23,6 +23,19 @@ int		ft_strcheck(char *str)
 	return (0);
 }
 
+void	ft_lstprint(t_list *list)
+{
+	t_list *tmp;
+
+	tmp = list;
+	while (tmp)
+	{
+		(tmp->content) ? ft_putstr(tmp->content) : 0;
+		ft_putstr("\n");
+		tmp = tmp->next;
+	}
+}
+
 int		ft_issorted(int *arr, int n, int order)
 {
 	int		i;

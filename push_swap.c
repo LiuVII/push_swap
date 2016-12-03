@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "push_swap.h"
+#include <math.h>
 
 /*
 **convert array to natural numbers permutations
@@ -51,16 +52,6 @@ int		*ft_fillrank(int *arr, int n)
 	return (0);
 }
 
-void	ft_lstprint(t_list *list)
-{
-	while (list)
-	{
-		(list->content) ? ft_putstr(list->content) : 0;
-		ft_putstr("\n");
-		list = list->next;
-	}
-}
-
 int		main(int argc, char **argv)
 {
 	int		*a[2];
@@ -86,7 +77,9 @@ int		main(int argc, char **argv)
 	}
 	list = NULL;
 	n[1] = 0;
-	printf("Op num: %d\n",ft_brute_sort(a, n, 0, -1, &list));
+	// list = ft_lstnew("", 1);
+	printf("Op num: %d\n",ft_brute_sort(a, n, /*(double)n[0] * sqrt(n[0])*/ ((n[0] * n[0]) * 0.6 - 1.5 * n[0] + 1), &list, -1));
+	// printf("Op num: %d\n",ft_brute_sort(a, n, 0, &list/*, -1*/));
 	ft_lstprint(list);
 	ft_lstclr(&list);
 	while (++i < n[0])
