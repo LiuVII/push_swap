@@ -83,7 +83,7 @@ void	ft_push(int *a, int *b, int *n, int *m)
 {
 	if (*n > 0)
 	{
-		ft_rot(b, *m, 1);
+		ft_rot(b, *m, -1);
 		b[*m] = b[0];
 		b[0] = a[0];
 		(*m)++;

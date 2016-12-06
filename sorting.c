@@ -35,29 +35,29 @@ char	*ft_get_instr(int i, int rev)
 
 	tmp = NULL;
 	(i == 0) ? (tmp = "sa") : 0;
-	// (i == 1) ? (tmp = "sb") : 0;
-	// (i == 2) ? (tmp = "ss") : 0;
+	(i == 1) ? (tmp = "sb") : 0;
+	(i == 2) ? (tmp = "ss") : 0;
 	if (rev > 0)
 	{
-		(i == 1) ? (tmp = "ra") : 0;
-		// (i == 4) ? (tmp = "rb") : 0;
-		// (i == 5) ? (tmp = "rr") : 0;
-		// (i == 6) ? (tmp = "pb") : 0;
-		// (i == 7) ? (tmp = "pa") : 0;
-		(i == 2) ? (tmp = "rra") : 0;
-		// (i == 9) ? (tmp = "rrb") : 0;
-		// (i == 10) ? (tmp = "rrr") : 0;
+		(i == 3) ? (tmp = "ra") : 0;
+		(i == 4) ? (tmp = "rb") : 0;
+		(i == 5) ? (tmp = "rr") : 0;
+		(i == 6) ? (tmp = "pb") : 0;
+		(i == 7) ? (tmp = "rra") : 0;
+		(i == 8) ? (tmp = "rrb") : 0;
+		(i == 9) ? (tmp = "rrr") : 0;
+		(i == 10) ? (tmp = "pa") : 0;
 	}
 	else
 	{
-		(i == 1) ? (tmp = "rra") : 0;
-		// (i == 4) ? (tmp = "rrb") : 0;
-		// (i == 5) ? (tmp = "rrr") : 0;
-		// (i == 6) ? (tmp = "pa") : 0;
-		// (i == 7) ? (tmp = "pb") : 0;
-		(i == 2) ? (tmp = "ra") : 0;
-		// (i == 9) ? (tmp = "rb") : 0;
-		// (i == 10) ? (tmp = "rr") : 0;		
+		(i == 3) ? (tmp = "rra") : 0;
+		(i == 4) ? (tmp = "rrb") : 0;
+		(i == 5) ? (tmp = "rrr") : 0;
+		(i == 6) ? (tmp = "pa") : 0;
+		(i == 7) ? (tmp = "ra") : 0;
+		(i == 8) ? (tmp = "rb") : 0;
+		(i == 9) ? (tmp = "rr") : 0;		
+		(i == 10) ? (tmp = "pb") : 0;
 	}
 	return (tmp);
 }
@@ -70,53 +70,7 @@ int ft_iscomb(int *a)
 	return (0);
 }
 
-int	ft_brute_sort(int *a[2], int n[2], int iter, t_list **list, int iprev)
-{
-	int	i;
-	int	j;
-	int	tmp;
-	// char	*instr;
-	// t_list	*new;
-
-	// if (!ft_issorted(a[0], n[0], 1))
-	if (!ft_iscomb(a[0]))
-	{
-		if (iter)
-		{
-			i = -1;
-			j = -1;
-			// tmp = 0;
-			(!(*list)) ? *list = ft_lstnew("", 1) : 0;
-			while (++i < 3)
-				if ((i == 0 && iprev != 0) || (i == 1 && iprev != 2) || (i == 2 && iprev != 1))
-				{
-					// printf("OUT it: %d i: %d j: %d, tmp %d, imax %d |", iter, i, j, tmp, imax);
-					ft_apply_isnstr(a, ft_get_instr(i, 1), n, 0);
-					if ((tmp = ft_brute_sort(a, n, iter - 1, &((*list)->next), i)))
-					{
-						// printf("BEFORE it: %d j: %d, tmp %d, imax %d |\n", iter, j, tmp, imax);
-						free((*list)->content);
-						(*list)->content = strdup(ft_get_instr(i, 1));
-						j = i;
-						iter = tmp;
-						// printf("AFTER j: %d, tmp %d |\n", j, tmp);
-						// ft_lstprint(*list);
-					}
-					ft_apply_isnstr(a, ft_get_instr(i, -1), n, 0);
-				}
-			if (j < 0)
-				return (0);
-			return (1 + iter);
-		}
-		return (0);
-	}
-	// printf("clear list tail\n");
-	((*list)) ? ft_lstclr(&(*list)) : 0;
-	*list = NULL;
-	return (1);
-}
-
-// int	ft_brute_sort(int *a[2], int n[2], int iter, int imax, t_list **list/*, int iprev*/)
+// int	ft_brute_sort(int *a[2], int n[2], int iter, t_list **list, int iprev)
 // {
 // 	int	i;
 // 	int	j;
@@ -124,46 +78,35 @@ int	ft_brute_sort(int *a[2], int n[2], int iter, t_list **list, int iprev)
 // 	// char	*instr;
 // 	// t_list	*new;
 
-// 	if (imax < 0)
-// 		imax = ft_maxi(n[0] + n[1]); 
-// 	if (!ft_issorted(a[0], n[0], 1) || n[1])
+// 	// if (!ft_issorted(a[0], n[0], 1))
+// 	if (!ft_iscomb(a[0]))
 // 	{
-// 		if (iter + 1 < imax)
+// 		if (iter)
 // 		{
 // 			i = -1;
 // 			j = -1;
-// 			tmp = 0;
+// 			// tmp = 0;
 // 			(!(*list)) ? *list = ft_lstnew("", 1) : 0;
-// 			// (*list)->next = ft_lstnew("", 1);
 // 			while (++i < 3)
-// 				// if ((i == 0 && iprev != 0) || (i == 1 && iprev != 2) || (i == 2 && iprev != 1))
+// 				if ((i == 0 && iprev != 0) || (i == 1 && iprev != 2) || (i == 2 && iprev != 1))
 // 				{
 // 					// printf("OUT it: %d i: %d j: %d, tmp %d, imax %d |", iter, i, j, tmp, imax);
-// 					// instr = ft_get_instr(i, 1);
 // 					ft_apply_isnstr(a, ft_get_instr(i, 1), n, 0);
-// 					if ((tmp = ft_brute_sort(a, n, iter + 1, imax, &((*list)->next)/*, i*/)) && iter + tmp < imax)
+// 					if ((tmp = ft_brute_sort(a, n, iter - 1, &((*list)->next), i)))
 // 					{
 // 						// printf("BEFORE it: %d j: %d, tmp %d, imax %d |\n", iter, j, tmp, imax);
-// 						// if (j >= 0)
-// 						// {
-// 						// 	((*list)->next) ? ft_lstclr(&((*list)->next)) : 0;
-// 						// 	(*list)->next = NULL;
-// 						// }
 // 						free((*list)->content);
 // 						(*list)->content = strdup(ft_get_instr(i, 1));
 // 						j = i;
-// 						imax = iter + tmp;
-// 						// printf("AFTER j: %d, tmp %d, imax %d |\n", j, tmp, imax);
+// 						iter = tmp;
+// 						// printf("AFTER j: %d, tmp %d |\n", j, tmp);
 // 						// ft_lstprint(*list);
 // 					}
 // 					ft_apply_isnstr(a, ft_get_instr(i, -1), n, 0);
 // 				}
 // 			if (j < 0)
-// 			{
-				
 // 				return (0);
-// 			}
-// 			return (1 + imax - iter);
+// 			return (1 + iter);
 // 		}
 // 		return (0);
 // 	}
@@ -172,6 +115,248 @@ int	ft_brute_sort(int *a[2], int n[2], int iter, t_list **list, int iprev)
 // 	*list = NULL;
 // 	return (1);
 // }
+int	ft_getmin(int *rtab, int n)
+{
+	int		sum;
+	int		j;
+	int		k;
+	int		pos;
+	int		neg;
+
+	j = -1;
+	pos = 0;
+	neg = 0;
+	sum = 0;
+	while (++j < n)
+	{
+		if (rtab[j] > 0 && ++pos)
+			sum += rtab[j];
+		else if (rtab[j] < 0)
+			++neg;
+	}
+	k = 0;
+	while((2 * pos - n) > 0 || (2 * neg - n) > 0)
+	{
+		j = -1;
+		k += (pos > neg) ? 1 : -1; 
+		pos = 0;
+		neg = 0;
+		sum = 0;
+		while (++j < n)
+		{
+			if (rtab[j] - k > 0 && ++pos)
+				sum += rtab[j] - k;
+			else if (rtab[j] - k < 0)
+				++neg;
+		}
+		sum += abs(k);
+	}
+	return (sum);
+}
+
+void	ft_update_rank(int *rtab[2], int n[2], int i, int sum[2])
+{
+	int		j;
+	int		tmp;
+
+	if (i < 3)
+	{
+		if ((i == 0 || i == 2) && n[0] > 1)
+		{
+			rtab[0][0]++;
+			rtab[0][1]--;
+		}
+		if ((i == 1 || i == 2) && n[1] > 1)
+		{
+			rtab[1][0]++;
+			rtab[1][1]--;
+		}		
+	}
+//how rotation should affect b and a ranks? 
+	else if (i < 6)
+	{
+		if ((i == 3 || i == 5) && n[0] > 1)
+		{
+			j = -1;
+			tmp = rtab[0][0];
+			while (++j < n[0] - 1)
+				rtab[0][j] = rtab[0][j + 1] - 1;
+			rtab[0][n[0] - 1] = tmp + n[0] - 1;
+		}
+		if ((i == 4 || i == 5) && n[1] > 1)
+		{
+			j = -1;
+			tmp = rtab[1][0];
+			while (++j < n[1] - 1)
+				rtab[1][j] = rtab[1][j + 1] - 1;
+			rtab[1][n[1] - 1] = tmp + n[1] - 1;			
+		}
+	}
+	else if (i > 6 && i < 10)
+	{
+		if ((i == 7 || i == 9) && n[0] > 1)
+		{
+			j = n[0] - 1;
+			tmp = rtab[0][n[0] - 1];
+			while (j--)
+				rtab[0][j + 1] = rtab[0][j] + 1;
+			rtab[0][0] = tmp - n[0] + 1;
+		}
+		if ((i == 8 || i == 9) && n[1] > 1)
+		{
+			j = n[1] - 1;
+			tmp = rtab[1][n[1] - 1];
+			while (j--)
+				rtab[1][j + 1] = rtab[1][j] + 1;
+			rtab[1][0] = tmp - n[1] + 1;
+		}
+	}
+	else
+	{
+//how rank should change when we push a to b or b to a?
+		if (i == 6)
+		{
+			j = n[1] - 1;
+			while (j--)
+				rtab[1][j + 1] = rtab[1][j];
+			rtab[1][0] = rtab[0][0];
+			j = -1;
+			while (++j < n[0])
+				rtab[0][j] = rtab[0][j + 1];	
+		}
+		if (i == 10)
+		{
+			j = n[0] - 1;
+			while (j--)
+				rtab[0][j + 1] = rtab[0][j] + 1;
+			rtab[0][0] = rtab[1][0];
+			j = -1;
+			while (++j < n[1])
+				rtab[1][j] = rtab[1][j + 1];			
+		}
+	}
+	sum[0] = ft_getmin(rtab[0], n[0]);
+	sum[1] = ft_getmin(rtab[1], n[1]);
+}
+
+int	ft_smart_sort(int *a[2], int n[2], int *rtab[2], t_list **list)
+{
+	int		i;
+	int		sum[2];
+	int		op;
+	int		tmp[2];
+	char	*str;
+	t_list	*new;
+
+	ft_update_rank(rtab, n, -1, sum);
+	op = 0;
+	*list = ft_lstnew("", 1);
+	new = *list;
+	new->next = NULL;
+	while (sum[0] + sum[1] && ++op)
+	{
+		new->next = ft_lstnew("", 1);
+		i = -1;
+		tmp[0] = -1;
+		tmp[1] = -1;
+		while (++i < 10)
+			if (i != 6)
+			{
+				str = ft_get_instr(i, 1);
+				ft_apply_isnstr(a, str, n, 0);
+				ft_update_rank(rtab, n, i, tmp);
+				if (tmp[0] + tmp[1] < sum[0] + sum[1])
+				{
+					sum[0] = tmp[0];
+					sum[1] = tmp[1];
+					free(new->next->content);
+					new->next->content = ft_strdup(str);
+				}
+				else
+					ft_apply_isnstr(a, ft_get_instr(i, -1), n, 0);	
+			}
+		if (ft_strcmp(new->next->content, "") == 0)
+		{
+//DEBUG
+			printf("n[0] %d, a[0] ", n[0]);
+			ft_print_arr(a[0], n[0]);
+			printf("rank a[0] ");
+			ft_print_arr(rtab[0], n[0]);
+			printf("n[1] %d, a[1] ", n[1]);
+			ft_print_arr(a[1], n[1]);
+			printf("rank a[1] ");
+			ft_print_arr(rtab[1], n[1]);
+//DEBUG END
+			// i = (sum[0]) ? 6 : 10;
+			// str = ft_get_instr(i, 1);
+			// ft_apply_isnstr(a, str, n, 0);
+			// ft_update_rank(rtab, n, i, sum);
+			// free(new->next->content);
+			// new->next->content = ft_strdup(str);						
+		}
+		new = new->next;
+	}
+	return (op);
+}
+
+int	ft_brute_sort(int *a[2], int n[2], int iter, t_list **list, int iprev)
+{
+	int	i;
+	int	j;
+	int	tmp;
+	// char	*instr;
+	// t_list	*new;
+
+	if (iprev == -1)
+		printf("max iter %d\n", iter);
+	if (!ft_issorted(a[0], n[0], 1) || n[1] > 0)
+	{
+		if (iter)
+		{
+			i = -1;
+			j = -1;
+			tmp = 0;
+			(!(*list)) ? *list = ft_lstnew("", 1) : 0;
+			// (*list)->next = ft_lstnew("", 1);
+			while (++i < 11 && iter)
+				if ((i == 6 && n[0] && iprev != 10) || (i == 10 && n[1] && iprev != 6) || (i < 3 && iprev != i)
+					|| (i >= 3 && i < 6 && iprev != i + 4) || ( i >= 7 && i < 10 && iprev != i - 4))
+				{
+					// instr = ft_get_instr(i, 1);
+					ft_apply_isnstr(a, ft_get_instr(i, 1), n, 0);
+					// printf("OUT it: %d i: %d j: %d, tmp %d, n[0] %d\n", iter, i, j, tmp, n[0]);
+					if ((tmp = ft_brute_sort(a, n, iter - 1, &((*list)->next), i)) >= 0)
+					{
+						// printf("BEFORE j: %d, iter %d |\n", j, iter);
+						// if (j >= 0)
+						// {
+						// 	((*list)->next) ? ft_lstclr(&((*list)->next)) : 0;
+						// 	(*list)->next = NULL;
+						// }
+						free((*list)->content);
+						(*list)->content = ft_strdup(ft_get_instr(i, 1));
+						j = i;
+						iter = tmp;
+						// printf("AFTER j: %d, tmp %d |\n", j, tmp);
+						// ft_lstprint(*list);
+						// ft_print_arr(a[0], n[0]);
+						// ft_print_arr(a[1], n[1]);
+					}
+					ft_apply_isnstr(a, ft_get_instr(i, -1), n, 0);
+					// if (tmp == 1)
+					// 	return (2);
+				}
+			if (j < 0)
+				return (-1);
+			return (1 + iter);
+		}
+		return (-1);
+	}
+	// printf("clear list tail\n");
+	((*list)) ? ft_lstclr(&(*list)) : 0;
+	*list = NULL;
+	return (0);
+}
 
 // int	ft_sort(int *a, int *b, int *r, int n)
 // {

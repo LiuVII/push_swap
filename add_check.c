@@ -59,7 +59,7 @@ void	ft_apply_isnstr(int *a[2], char *line, int n[2], int debug)
 	if (!line)
 		return ;
 	(!ft_strcmp(line, "sa") && n[0] > 1) ? ft_swap(&a[0][0], &a[0][1]) : 0;
-	(!ft_strcmp(line, "sb") && n[0] > 1) ? ft_swap(&a[1][0], &a[1][1]) : 0;
+	(!ft_strcmp(line, "sb") && n[1] > 1) ? ft_swap(&a[1][0], &a[1][1]) : 0;
 	if (!ft_strcmp(line, "ss"))
 	{
 		(n[0] > 1) ? ft_swap(&a[0][0], &a[0][1]) : 0;
@@ -73,7 +73,7 @@ void	ft_apply_isnstr(int *a[2], char *line, int n[2], int debug)
 		ft_rot(a[1], n[1], 1);
 	}	
 	(!ft_strcmp(line, "pb")) ? ft_push(a[0], a[1], &n[0], &n[1]) : 0;
-	(!ft_strcmp(line, "pa")) ? ft_push(a[0], a[1], &n[1], &n[0]) : 0;
+	(!ft_strcmp(line, "pa")) ? ft_push(a[1], a[0], &n[1], &n[0]) : 0;
 	(!ft_strcmp(line, "rra")) ? ft_rot(a[0], n[0], -1) : 0;
 	(!ft_strcmp(line, "rrb")) ? ft_rot(a[1], n[1], -1) : 0;
 	if (!ft_strcmp(line, "rrr"))
@@ -85,6 +85,7 @@ void	ft_apply_isnstr(int *a[2], char *line, int n[2], int debug)
 	{
 		printf("%s: ", line);
 		ft_print_arr(a[0], n[0]);
+		ft_print_arr(a[1], n[1]);
 	}
 }
 
