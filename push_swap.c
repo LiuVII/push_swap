@@ -60,11 +60,17 @@ int		main(int argc, char **argv)
 	int		i;
 	t_list	*list;
 
-	if ((i = -1) && argc < 2)
+	// if ((i = -1) && argc < 2)
+	// 	return (0);
+	if ((i = -1) && !argc && !argv[0])
 		return (0);
 	n[0] = 0;
 	rtab[0] = NULL;
-	a[0] = ft_atoi_tab(ft_strsplit(argv[1], ' '), &n[0]);
+	char *line;
+	line = NULL;
+	get_next_line(0, &line);
+	a[0] = ft_atoi_tab(ft_strsplit(line, ' '), &n[0]);
+	// a[0] = ft_atoi_tab(ft_strsplit(argv[1], ' '), &n[0]);
 	// printf("%d\n", n);
 	if (!(a[0] = ft_arr_simpl(a[0], n[0]))
 		|| !(rtab[0] = ft_fillrank(a[0], n[0]))
@@ -81,14 +87,35 @@ int		main(int argc, char **argv)
 	n[1] = 0;
 	// list = ft_lstnew("", 1);
 	// printf("Op num: %d\n",ft_brute_sort(a, n, /*(double)n[0] * sqrt(n[0])*/ ((n[0] * n[0]) * 0.6 - 1.5 * n[0] + 1), &list, -1));
-	printf("Op num: %d\n",ft_smart_sort(a, n, rtab, &list));
-	// printf("Op num: %d\n",ft_brute_sort(a, n, 0, &list/*, -1*/));
-	ft_lstprint(list);
+	// printf("Very Smart sort op num: %d\n",ft_vsmart_sort(a, n, &list));
+	// // ft_lstprint(list);
+	// ft_lstclr(&list);
+	// free(a[0]);
+	// a[0] = ft_atoi_tab(ft_strsplit(line, ' '), &n[0]);
+	// list = NULL;
+	// n[1] = 0;
+	printf("Smart sort op num: %d\n",ft_smart_sort(a, n, rtab, &list));
+	i = -1;
+	while (++i < n[0])
+		printf("%d ", a[0][i]);
+	printf("\n");
+	// ft_lstprint(list);
 	ft_lstclr(&list);
+	free(a[0]);
+	a[0] = ft_atoi_tab(ft_strsplit(line, ' '), &n[0]);
+	list = NULL;
+	n[1] = 0;
+	printf("Kinda smart sort op num: %d\n",ft_ksmart_sort(a, n, &list));
+	// printf("Op num: %d\n",ft_brute_sort(a, n, 0, &list/*, -1*/));
+	// ft_lstprint(list);
+	ft_lstclr(&list);
+	i = -1;
 	while (++i < n[0])
 		printf("%d ", a[0][i]);
 	printf("\n");
 	free(a[0]);
+	a[0] = ft_atoi_tab(ft_strsplit(line, ' '), &n[0]);
+	printf("Bubble sort: %d\n",ft_bb_sort(a[0], a[1], n[0]));
 	free(rtab[0]);
 	free(rtab[1]);
 	free(a[1]);

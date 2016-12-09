@@ -48,6 +48,16 @@ int		ft_issorted(int *arr, int n, int order)
 				return (0);
 		return (1);
 	}
+	else if (order == 2)
+	{
+		order = 0;
+		while (++i < n - 1)
+			if (arr[i] > arr[i + 1] && ++order && order >= 2)
+				return (0);
+		if (order == 1 && arr[0] < arr[n - 1])
+			return (0);
+		return (1);		
+	}
 	while (++i < n - 1)
 		if (arr[i] < arr[i + 1])
 			return (0);
