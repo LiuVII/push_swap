@@ -16,7 +16,7 @@ NAME1		=	checker
 FUNC0		=	push_swap.c
 FUNC1		=	checker.c
 
-FUNCS		+=	sorting.c\
+FUNCS		+=	sorts.c\
 				psw_op.c\
 				add_check.c
 

@@ -30,94 +30,37 @@ int		*ft_arr_simpl(int *arr, int n)
 **Also check for duplicates here ("sum" must be == 0)
 */
 
-int		*ft_fillrank(int *arr, int n)
-{
-	int *rtab;
-	int	i;
-	int	sum;
-
-	if (!(rtab = (int*)malloc(sizeof(int) * n)))
-		return (0);
-	i = -1;
-	sum = 0;
-	while (++i < n)
-	{
-		rtab[i] = i + 1 - arr[i];
-		sum += rtab[i];
-	}
-	if (!sum)
-		return (rtab);
-	free(rtab);
-	printf("Sum %d\n", sum);
-	return (0);
-}
-
 int		main(int argc, char **argv)
 {
 	int		*a[2];
-	int		*rtab[2];
 	int		n[2];
-	int		i;
 	t_list	*list;
 
 	// if ((i = -1) && argc < 2)
 	// 	return (0);
-	if ((i = -1) && !argc && !argv[0])
+	if (!argc && !argv[0])
 		return (0);
 	n[0] = 0;
-	rtab[0] = NULL;
 	char *line;
 	line = NULL;
 	get_next_line(0, &line);
 	a[0] = ft_atoi_tab(ft_strsplit(line, ' '), &n[0]);
 	// a[0] = ft_atoi_tab(ft_strsplit(argv[1], ' '), &n[0]);
-	// printf("%d\n", n);
 	if (!(a[0] = ft_arr_simpl(a[0], n[0]))
-		|| !(rtab[0] = ft_fillrank(a[0], n[0]))
-		|| !(a[1] = (int*)malloc(sizeof(int) * n[0]))
-		|| !(rtab[1] = (int*)malloc(sizeof(int) * n[0])))
+		|| !(a[1] = (int*)malloc(sizeof(int) * n[0])))
 	{
 		(a[0]) ? free(a[0]) : 0;
-		(rtab[0]) ? free(rtab[0]) : 0;
-		(a[1]) ? free(a[1]) : 0;
 		ft_putstr_fd("Error\n", 2);
 		return (-1);
 	}
 	list = NULL;
 	n[1] = 0;
-	// list = ft_lstnew("", 1);
-	// printf("Op num: %d\n",ft_brute_sort(a, n, /*(double)n[0] * sqrt(n[0])*/ ((n[0] * n[0]) * 0.6 - 1.5 * n[0] + 1), &list, -1));
-	// printf("Very Smart sort op num: %d\n",ft_vsmart_sort(a, n, &list));
-	// // ft_lstprint(list);
-	// ft_lstclr(&list);
-	// free(a[0]);
-	// a[0] = ft_atoi_tab(ft_strsplit(line, ' '), &n[0]);
-	// list = NULL;
-	// n[1] = 0;
-	printf("Smart sort op num: %d\n",ft_smart_sort(a, n, rtab, &list));
-	i = -1;
-	while (++i < n[0])
-		printf("%d ", a[0][i]);
-	printf("\n");
-	// ft_lstprint(list);
+	list = ft_lstnew("", 1);
+	printf("Smart sort op num: %d\n",ft_smart_sort(a, n, &list));
+	// printf("Smart sort op num: %d\n",ft_smart_sort(a, n, a, &list));
+	ft_lstprint(list);
 	ft_lstclr(&list);
 	free(a[0]);
-	a[0] = ft_atoi_tab(ft_strsplit(line, ' '), &n[0]);
-	list = NULL;
-	n[1] = 0;
-	printf("Kinda smart sort op num: %d\n",ft_ksmart_sort(a, n, &list));
-	// printf("Op num: %d\n",ft_brute_sort(a, n, 0, &list/*, -1*/));
-	// ft_lstprint(list);
-	ft_lstclr(&list);
-	i = -1;
-	while (++i < n[0])
-		printf("%d ", a[0][i]);
-	printf("\n");
-	free(a[0]);
-	a[0] = ft_atoi_tab(ft_strsplit(line, ' '), &n[0]);
-	printf("Bubble sort: %d\n",ft_bb_sort(a[0], a[1], n[0]));
-	free(rtab[0]);
-	free(rtab[1]);
 	free(a[1]);
 	return (0);
 }

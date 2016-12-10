@@ -35,7 +35,7 @@ int		main(int argc, char **argv)
 		return (-1);
 	}	
 	while ((ret = get_next_line(0, &line)) > 0)
-		ft_apply_isnstr(a, line, n, 1);
+		ft_apply_isnstr(a, line, n, 0);
 	if (ret == -1)
 	{
 		ft_putstr_fd("Error\n", 2);

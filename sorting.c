@@ -351,33 +351,95 @@ void	ft_push_to_pos(int *a[2], int n[2], int shift, int order)
 	}
 }
 
+void	ft_rot_to_pos(int *a[2], int n[2], int shift, int order)
+{
+	char	*str;	
+
+	if (order == 1)
+	{
+		str = (shift < 0) ? ft_get_instr(7, 1) : ft_get_instr(3, 1);
+		shift = (shift < 0) ? -shift : shift;
+		while (shift--)
+			ft_apply_isnstr(a, str, n, 0);
+	}
+	else if (order == -1)
+	{
+		str = (shift < 0) ? ft_get_instr(3, 1) : ft_get_instr(7, 1);
+		shift = (shift < 0) ? -shift : shift;
+		while (shift--)
+			ft_apply_isnstr(a, str, n, 0);
+	}
+}
+
 int		ft_find_path(int *a[2], int n[2], int depth)
 {
-	// int		i;
+	int		i;
 	// int		prev;
 	int		curr;	
 	int		tot;
 
-	// i = -1;
+	i = -1;
 	// prev = 0;
 	tot = 0;
-	// while (++i < n[0])
-	// {
-	// 	// s += MIN(i, n[0] - i);
-	// 	curr = ft_find_shift(a[1], a[0][i], n[1], -1);
-	// 	tot += ABS(curr - prev);
-	// 	prev = curr;
-	// }
 	if (!ft_issorted(a[0], n[0], 2) && depth)
-	{
-		curr = ft_find_shift(a[1], a[0][0], n[1], -1);
-		ft_push_to_pos(a, n, curr, 1);
-		tot = ABS(curr) + 1 + ft_find_path(a, n, depth - 1);
-		ft_push_to_pos(a, n, curr, -1);		
-	}
-	return (tot);
+		while (++i < n[0])
+		{
+			// s += MIN(i, n[0] - i);
+			curr = ft_find_shift(a[1], a[0][i], n[1], -1);
+			if ((i <= n[0] - i && curr >=0) || (i > n[0] - i && curr < 0))
+				curr = MAX(MIN(i, n[0] - i), ABS(curr));
+			else if (i <= n[0] - i || i > n[0] - i)
+				curr = MIN(i, n[0] - i) + ABS(curr);
+			if (i == 0 || curr < tot)
+				tot = curr;
+		}
+	// if (!ft_issorted(a[0], n[0], 2) && depth)
+	// {
+	// 	curr = ft_find_shift(a[1], a[0][0], n[1], -1);
+	// 	// ft_push_to_pos(a, n, curr, 1);
+	// 	tot = ABS(curr)/* + ((depth > 0) ? ft_find_path(a, n, depth - 1) : 0)*/;
+	// 	// ft_push_to_pos(a, n, curr, -1);		
+	// }
+	return (tot + 1);
 }
 
+int		ft_find_path_2(int *a[2], int n[2], int depth, int *rota)
+{
+	int		i;
+	int		prev;
+	int		tmp;
+	int		curr;	
+	int		rotb;
+
+	i = -1;
+	prev = 0;
+	rotb = 0;
+	curr = 0;
+	if (!ft_issorted(a[0], n[0], 2) && depth)
+		while (++i < n[0])
+		{
+			// s += MIN(i, n[0] - i);
+			tmp = ft_find_shift(a[1], a[0][i], n[1], -1);
+			if ((i <= n[0] - i && tmp >=0) || (i > n[0] - i && tmp < 0))
+				curr = MAX(MIN(i, n[0] - i), ABS(tmp));
+			else if (i <= n[0] - i || i > n[0] - i)
+				curr = MIN(i, n[0] - i) + ABS(tmp);
+			if (i == 0 || curr < prev)
+			{
+				rotb = tmp;
+				*rota = (i < n[0] - i) ? i : i - n[0];
+				prev = curr;
+			}
+		}
+	// if (!ft_issorted(a[0], n[0], 2) && depth)
+	// {
+	// 	curr = ft_find_shift(a[1], a[0][0], n[1], -1);
+	// 	// ft_push_to_pos(a, n, curr, 1);
+	// 	tot = ABS(curr)/* + ((depth > 0) ? ft_find_path(a, n, depth - 1) : 0)*/;
+	// 	// ft_push_to_pos(a, n, curr, -1);		
+	// }
+	return (rotb);
+}
 // int	ft_smart_sort(int *a[2], int n[2], int *rtab[2], t_list **list)
 // {
 // 	int		i;
@@ -569,53 +631,111 @@ int		ft_find_path(int *a[2], int n[2], int depth)
 // 	return (op);
 // }
 
-int		ft_find_optimum(int *a[2], int n[2], int depth)
+int		ft_find_optimum_elem(int *a[2], int n[2], int depth, int elem)
 {
 	int		i;
 	int		j;
-	// int		prev;
+	int		prev;
 	int		tot;
 	int		curr;
 	int		tmp;
 	char	*str;
 
 	// i = -1;
-	// prev = 0;
+	prev = 0;
+	tmp = 0;
 	tot = 0;
-	// while (++i < n[0])
-	// {
-	// 	// s += MIN(i, n[0] - i);
-	// 	curr = ft_find_shift(a[1], a[0][i], n[1], -1);
-	// 	tot += ABS(curr - prev);
-	// 	prev = curr;
-	// }
-	if (!ft_issorted(a[0], n[0], 2) && depth)
+	if (!ft_issorted(a[0], n[0], 2) && elem > 0)
 	{
 		i = -1;
 		j = -1;
+		curr = ft_find_path_2(a, n, 1, &tmp);
+		// curr = ft_find_path(a, n, 1);
+		// curr = ABS(ft_find_shift(a[1], a[0][0], n[1], -1)) + 1;
+		(elem > 1) ? ft_rot_to_pos(a, n, tmp, 1) : 0;
+		(elem > 1) ? ft_push_to_pos(a, n, curr, 1) : 0;
+		tot = ((tmp * curr >= 0) ? MAX(ABS(tmp), ABS(curr)) : ABS(tmp - curr)) + 1;
+		// if (tot != ft_find_path(a, n, 1))
+		// 	printf("DIFF 1 %d | path_2 %d, rota %d, rotb %d\n", tot - ft_find_path(a, n, 1), tot, tmp, curr);
+		tot += ((elem > 1) ? ft_find_optimum_elem(a, n, depth, elem - 1) : 0);
+		// tot = ABS(curr);
+		(elem > 1) ? ft_push_to_pos(a, n, curr, -1) : 0;
+		(elem > 1) ? ft_rot_to_pos(a, n, tmp, -1) : 0;
 		tmp = 0;
-		curr = ft_find_shift(a[1], a[0][0], n[1], -1);
-		ft_push_to_pos(a, n, curr, 1);
-		tot = ABS(curr) + 1 + ft_find_optimum(a, n, depth - 1);
-		ft_push_to_pos(a, n, curr, -1);
 		while (++i < 10)
 			if (i != 6 && i != 1 && i != 2)
 			{
 				str = ft_get_instr(i, 1);
-				ft_apply_isnstr(a, str, n, 0);		
-				curr = ft_find_shift(a[1], a[0][0], n[1], -1);
-				ft_push_to_pos(a, n, curr, 1);
-				tmp = ABS(curr) + 1 + ft_find_optimum(a, n, depth - 1);
-				if (tmp < tot)
+				ft_apply_isnstr(a, str, n, 0);
+				if (depth > 0)
+					tmp = 1 + ft_find_optimum_elem(a, n, depth - 1, elem);
+				else
+				{
+					curr = ft_find_path_2(a, n, 1, &prev);
+					// curr = ft_find_path(a, n, 1);
+					// curr = ABS(ft_find_shift(a[1], a[0][0], n[1], -1)) + 1;
+					(elem > 1) ? ft_rot_to_pos(a, n, prev, 1) : 0;
+					(elem > 1) ? ft_push_to_pos(a, n, curr, 1) : 0;
+					tmp = ((prev * curr >= 0) ? MAX(ABS(prev), ABS(curr)) : ABS(prev - curr)) + 1;
+					// if (tmp != ft_find_path(a, n, 1))
+					// 	printf("DIFF 2 %d | path_2 %d, rota %d, rotb %d\n", tmp - ft_find_path(a, n, 1), tmp, prev, curr);
+					tmp += 1 + ((elem > 1) ? ft_find_optimum_elem(a, n, depth, elem - 1) : 0);
+					// tmp = 1 + ABS(curr) + ((elem > 1) ? ft_find_optimum_elem(a, n, depth, elem - 1) : 0);
+					(elem > 1) ? ft_push_to_pos(a, n, curr, -1) : 0;
+					(elem > 1) ? ft_rot_to_pos(a, n, prev, -1) : 0;
+				}
+				if (tmp <= tot)
 				{
 					tot = tmp;
 					j = i;
-				}
-				ft_push_to_pos(a, n, curr, -1);		
+				}	
 				ft_apply_isnstr(a, ft_get_instr(ft_rev(i), 1), n, 0);
 			}		
 	}
-	if (depth == 7)
+	if (elem == 1 && depth == 1)
+		return (j);
+	return (tot);
+}
+
+
+int		ft_find_optimum(int *a[2], int n[2], int depth)
+{
+	int		i;
+	int		j;
+	// int		prev;
+	int		tot;
+	// int		curr;
+	int		tmp;
+	char	*str;
+
+	// i = -1;
+	// prev = 0;
+	// prev = 0;
+	tot = 0;
+	if (!ft_issorted(a[0], n[0], 2) && depth >= 0)
+	{
+		i = -1;
+		j = -1;
+		tmp = 0;
+		tot = ABS(ft_find_shift(a[1], a[0][0], n[1], -1)) + 1 /*+ ft_find_optimum(a, n, depth - 1, -1)*/;
+		// tot = ABS(ft_find_shift(a[1], a[0][0], n[1], -1)) + ABS(ft_find_shift(a[1], a[0][1], n[1], -1)) + 2 /*+ ft_find_optimum(a, n, depth - 1, -1)*/;
+		while (++i < 10)
+			if (i != 6 && i != 1 && i != 2)
+			{
+				str = ft_get_instr(i, 1);
+				ft_apply_isnstr(a, str, n, 0);
+				tmp = 1 + ((depth > 0) ? ft_find_optimum(a, n, depth - 1) : ABS(ft_find_shift(a[1], a[0][0], n[1], -1)) + 1);
+				// tmp = 1 + ((depth > 0) ? ft_find_optimum(a, n, depth - 1, i) : ABS(ft_find_shift(a[1], a[0][0], n[1], -1))
+					 // + ABS(ft_find_shift(a[1], a[0][1], n[1], -1)) + 2);
+				if (tmp <= tot)
+				{
+					tot = tmp;
+					j = i;
+				}	
+				ft_apply_isnstr(a, ft_get_instr(ft_rev(i), 1), n, 0);
+			}		
+	}
+	if (depth == 2)
 		return (j);
 	return (tot);
 }
@@ -628,6 +748,7 @@ int	ft_vsmart_sort(int *a[2], int n[2], t_list **list)
 	char	*str;
 	int		flag;
 	t_list	*new;
+	int dcount;
 
 	// sum[0] = ft_find_path(a, n, 100);
 	printf("n[0] %d, a[0] ", n[0]);
@@ -637,6 +758,7 @@ int	ft_vsmart_sort(int *a[2], int n[2], t_list **list)
 	printf("\n");
 	op = 0;
 	flag = 0;
+	dcount = 0;
 	*list = ft_lstnew("", 1);
 	new = *list;
 	new->next = NULL;
@@ -645,7 +767,8 @@ int	ft_vsmart_sort(int *a[2], int n[2], t_list **list)
 	{
 		new->next = ft_lstnew("", 1);
 		i = -1;
-		j = ft_find_optimum(a, n, 7);
+		// j = ft_find_optimum(a, n, 2);
+		j = ft_find_optimum_elem(a, n, 1, 1);
 		if (j >= 0)
 		{
 			// printf("applying %d\n", j);
@@ -653,6 +776,8 @@ int	ft_vsmart_sort(int *a[2], int n[2], t_list **list)
 			ft_apply_isnstr(a, str, n, 0);
 			free(new->next->content);
 			new->next->content = ft_strdup(str);
+			if (ft_strcmp(new->content, ft_get_instr(ft_rev(j), 1)) == 0)
+				dcount++;
 		}
 		if (ft_strcmp(new->next->content, "") == 0)
 		{
@@ -712,6 +837,7 @@ int	ft_vsmart_sort(int *a[2], int n[2], t_list **list)
 				free(new->next->content);
 				new->next->content = ft_strdup("merge");
 			}						
+			j = -1;
 		}
 		// printf("i %d\n,n[0] %d, a[0] ", j, n[0]);
 		// printf("n[0] %d, a[0] ", n[0]);
@@ -721,6 +847,7 @@ int	ft_vsmart_sort(int *a[2], int n[2], t_list **list)
 		// printf("\n");
 		new = new->next;
 	}
+	printf("DOUBLES %d\n", dcount);
 	return (op);
 }
 
@@ -755,14 +882,14 @@ int	ft_smart_sort(int *a[2], int n[2], int *rtab[2], t_list **list)
 		j = -1;
 		tmp[0] = -1;
 		// tmp[1] = -1;
-		sum[0] = ft_find_path(a, n, 50);
+		sum[0] = ft_find_path(a, n, 1);
 		while (++i < 10)
 			if (i != 6 && i != 1 && i != 2)
 			{
 				str = ft_get_instr(i, 1);
 				ft_apply_isnstr(a, str, n, 0);
-				tmp[0] = ft_find_path(a, n, 100);
-				if (tmp[0] < sum[0])
+				tmp[0] = 1 + ft_find_path(a, n, 1);
+				if (tmp[0] <= sum[0])
 				{
 					sum[0] = tmp[0];
 					j = i;
