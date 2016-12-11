@@ -16,11 +16,20 @@
 **Still need error checker for input: numbers, out of integer range
 */
 
-int		ft_strcheck(char *str)
+int		ft_arrcheck(int *a, int n)
 {
-	if (str)
-		return (1);
-	return (0);
+	int		i;
+	int		j;
+
+	i = -1;
+	while (++i < n)
+	{
+		j = i;
+		while (++j < n)
+			if (a[i] == a[j])
+				return (0);
+	}
+	return (1);
 }
 
 void	ft_lstprint(t_list *list)
@@ -66,8 +75,6 @@ int		ft_issorted(int *arr, int n, int order)
 
 void	ft_apply_isnstr(int *a[2], char *line, int n[2], int debug)
 {
-	if (!line)
-		return ;
 	if (!ft_strcmp(line, "ss") || !ft_strcmp(line, "sa") || !ft_strcmp(line, "sb"))
 	{
 		(n[0] > 1 && ft_strcmp(line, "sb")) ? ft_swap(&a[0][0], &a[0][1]) : 0;
@@ -87,8 +94,10 @@ void	ft_apply_isnstr(int *a[2], char *line, int n[2], int debug)
 	}
 	if (debug)
 	{
+		ft_putstr(line);
+		ft_putstr(":\nStack A: ");
 		ft_print_arr(a[0], n[0]);
-		printf("%s: ", line);
+		ft_putstr("Stack B: ");
 		ft_print_arr(a[1], n[1]);
 	}
 }

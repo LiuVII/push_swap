@@ -12,6 +12,31 @@
 
 #include "push_swap.h"
 
+int		ft_strcheck(const char *str)
+{
+	int			sign;
+	long		num;
+
+	sign = 1;
+	num = 0;
+	if (*str == '+' || *str == '-')
+	{
+		sign = 44 - *str;
+		str++;
+	}
+	while (*str >= '0' && *str <= '9')
+	{
+		num *= 10;
+		num += *str - '0';
+		str++;
+		if (num + (sign - 1) / 2 > INT_MAX)
+			return (0);
+	}
+	if (*str)
+		return (0);
+	return (1);
+}
+
 int		*ft_atoi_tab(char **tab, int *len)
 {
 	int		i;
