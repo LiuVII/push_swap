@@ -12,58 +12,33 @@
 
 #include "push_swap.h"
 
-int		ft_strcheck(const char *str)
+void	ft_apply_isnstr(int *a[2], char *s, int n[2], int debug)
 {
-	int			sign;
-	long		num;
-
-	sign = 1;
-	num = 0;
-	if (*str == '+' || *str == '-')
+	if (!ft_strcmp(s, "ss") || !ft_strcmp(s, "sa") || !ft_strcmp(s, "sb"))
 	{
-		sign = 44 - *str;
-		str++;
+		(n[0] > 1 && ft_strcmp(s, "sb")) ? ft_swap(&a[0][0], &a[0][1]) : 0;
+		(n[1] > 1 && ft_strcmp(s, "sa")) ? ft_swap(&a[1][0], &a[1][1]) : 0;
 	}
-	while (*str >= '0' && *str <= '9')
+	if (!ft_strcmp(s, "rr") || !ft_strcmp(s, "ra") || !ft_strcmp(s, "rb"))
 	{
-		num *= 10;
-		num += *str - '0';
-		str++;
-		if (num + (sign - 1) / 2 > INT_MAX)
-			return (0);
+		(ft_strcmp(s, "rb")) ? ft_rot(a[0], n[0], 1) : 0;
+		(ft_strcmp(s, "ra")) ? ft_rot(a[1], n[1], 1) : 0;
 	}
-	if (*str)
-		return (0);
-	return (1);
-}
-
-int		*ft_atoi_tab(char **tab, int *len)
-{
-	int		i;
-	int		*itab;
-
-	if (!tab)
-		return (0);
-	i = 0;
-	while(tab[i])
-		i++;
-	*len = i;
-	itab = NULL;
-	if (!(itab = (int*)malloc(sizeof(int) * (*len))))
+	(!ft_strcmp(s, "pb")) ? ft_push(a[0], a[1], &n[0], &n[1]) : 0;
+	(!ft_strcmp(s, "pa")) ? ft_push(a[1], a[0], &n[1], &n[0]) : 0;
+	if (!ft_strcmp(s, "rrr") || !ft_strcmp(s, "rra") || !ft_strcmp(s, "rrb"))
 	{
-		ft_mapfree(&tab);
-		return (0);
+		(ft_strcmp(s, "rrb")) ? ft_rot(a[0], n[0], -1) : 0;
+		(ft_strcmp(s, "rra")) ? ft_rot(a[1], n[1], -1) : 0;
 	}
-	i = -1;
-	while (++i < *len)
+	if (debug)
 	{
-		if (!ft_strcheck(tab[i]))
-			return (0);
-		itab[i] = ft_atoi(tab[i]);
-		free(tab[i]);
+		ft_putstr(s);
+		ft_putstr(":\nStack A: ");
+		ft_print_arr(a[0], n[0]);
+		ft_putstr("Stack B: ");
+		ft_print_arr(a[1], n[1]);
 	}
-	free(tab);
-	return (itab);
 }
 
 void	ft_swap(int *a, int *b)
@@ -101,7 +76,7 @@ void	ft_rot(int *a, int n, int shift)
 			a[i] = a[i - 1];
 		}
 		a[0] = tmp;
-	}		
+	}
 }
 
 void	ft_push(int *a, int *b, int *n, int *m)
@@ -113,7 +88,7 @@ void	ft_push(int *a, int *b, int *n, int *m)
 		b[0] = a[0];
 		(*m)++;
 		ft_rot(a, *n, 1);
-		(*n)--;	
+		(*n)--;
 		a[*n] = 0;
 	}
 }

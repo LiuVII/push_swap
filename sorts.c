@@ -12,48 +12,6 @@
 
 #include "push_swap.h"
 
-void	ft_print_arr(int *a, int n)
-{
-	int		k;
-
-	k = -1;
-	while (++k < n)
-	{
-		ft_putnbr(a[k]);
-		ft_putchar(' ');
-	}
-	ft_putstr("\n");
-}
-
-char	*ft_get_instr(int i)
-{
-	char	*tmp;
-
-	tmp = NULL;
-	(i == 0) ? (tmp = "sa") : 0;
-	(i == 1) ? (tmp = "sb") : 0;
-	(i == 2) ? (tmp = "ss") : 0;
-	(i == 3) ? (tmp = "ra") : 0;
-	(i == 4) ? (tmp = "rb") : 0;
-	(i == 5) ? (tmp = "rr") : 0;
-	(i == 6) ? (tmp = "pb") : 0;
-	(i == 7) ? (tmp = "rra") : 0;
-	(i == 8) ? (tmp = "rrb") : 0;
-	(i == 9) ? (tmp = "rrr") : 0;
-	(i == 10) ? (tmp = "pa") : 0;
-	return (tmp);
-}
-
-int		ft_rev(int i)
-{
-	if (i < 3)
-		return (i);
-	else if (i > 2 && i < 7)
-		return (i + 4);
-	else
-		return (i - 4);
-}
-
 int		ft_find_shift(int *a, long num, int n, int order)
 {
 	int		j;
@@ -68,7 +26,7 @@ int		ft_find_shift(int *a, long num, int n, int order)
 			prev = (j - 1 < 0) ? a[n - 1] : a[j - 1];
 			if ((num > a[j] && num < prev) || (num > a[j] && a[j] > prev)
 				|| (num < a[j] && a[j] > prev && num < prev))
-				break;
+				break ;
 		}
 	else if (order == 1)
 		while (++j < n)
@@ -76,7 +34,7 @@ int		ft_find_shift(int *a, long num, int n, int order)
 			prev = (j - 1 < 0) ? a[n - 1] : a[j - 1];
 			if ((num < a[j] && num > prev) || (num < a[j] && a[j] < prev)
 				|| (num > a[j] && a[j] < prev && num > prev))
-				break;
+				break ;
 		}
 	prev = MIN(j, n - j);
 	return ((prev == j) ? prev : -prev);
@@ -90,11 +48,11 @@ int		ft_find_path(int *a[2], int n[2], int depth)
 
 	i = -1;
 	tot = 0;
-	if (!ft_issorted(a[0], n[0], 2) && depth)
+	if (!ft_issort(a[0], n[0], 2) && depth)
 		while (++i < n[0])
 		{
 			curr = ft_find_shift(a[1], a[0][i], n[1], -1);
-			if ((i <= n[0] - i && curr >=0) || (i > n[0] - i && curr < 0))
+			if ((i <= n[0] - i && curr >= 0) || (i > n[0] - i && curr < 0))
 				curr = MAX(MIN(i, n[0] - i), ABS(curr));
 			else if (i <= n[0] - i || i > n[0] - i)
 				curr = MIN(i, n[0] - i) + ABS(curr);
@@ -104,7 +62,7 @@ int		ft_find_path(int *a[2], int n[2], int depth)
 	return (tot + 1);
 }
 
-void	ft_mov_n_psuh(int *a[2], int n[2], t_list **list, int order)
+void	ft_mov_n_psuh(int *a[2], int n[2], t_list **list, int or)
 {
 	int		j;
 	char	*str;
@@ -112,12 +70,13 @@ void	ft_mov_n_psuh(int *a[2], int n[2], t_list **list, int order)
 	t_list	*new;
 
 	new = *list;
-	ins = (order > 0) ? 8 : 7;
-	if ((order > 0 && n[1] > 0) || (order == 0 && n[0] > 0))
+	ins = (or > 0) ? 8 : 7;
+	if ((or > 0 && n[1] > 0) || (or == 0 && n[0] > 0))
 	{
-		(order == 1) ? j = ft_find_shift(a[1], a[0][0], n[1], -1) : 0;
-		(order == 0) ? j = ft_find_shift(a[0], a[1][0], n[0], 1) : 0;
-		(order == 2) ? j = ft_find_shift(a[1], INT_MAX + 1, n[1], -1) : 0;
+		(or == 1) ? j = ft_find_shift(a[1], a[0][0], n[1], -1) : 0;
+		(or == 0 && n[1]) ? j = ft_find_shift(a[0], a[1][0], n[0], 1) : 0;
+		(or == 0 && !n[1]) ? j = ft_find_shift(a[0], INT_MIN - 1, n[0], 1) : 0;
+		(or == 2) ? j = ft_find_shift(a[1], INT_MAX + 1, n[1], -1) : 0;
 		str = (j < 0) ? ft_get_instr(ins) : ft_get_instr(ins - 4);
 		j = (j < 0) ? -j : j;
 		while (j--)
@@ -127,9 +86,9 @@ void	ft_mov_n_psuh(int *a[2], int n[2], t_list **list, int order)
 			ft_apply_isnstr(a, str, n, 0);
 		}
 	}
-	str = (order > 0) ? ft_get_instr(6) : ft_get_instr(10);
-	(order != 2) ? ft_apply_isnstr(a, str, n, 0) : 0;
-	(order != 2) ? new->next = ft_lstnew(str, ft_strlen(str) + 1) : 0;
+	str = (or > 0) ? ft_get_instr(6) : ft_get_instr(10);
+	(or < 2 && n[(or + 1) % 2] && (or = 3)) ? ft_apply_isnstr(a, str, n, 0) : 0;
+	(or == 3) ? new->next = ft_lstnew(str, ft_strlen(str) + 1) : 0;
 }
 
 int		ft_find_instr(int *a[2], int n[2])
@@ -162,7 +121,7 @@ void	ft_smart_sort(int *a[2], int n[2], t_list **list)
 	t_list	*new;
 
 	new = *list;
-	while (!ft_issorted(a[0], n[0], 1) || n[1])
+	while (!ft_issort(a[0], n[0], 1) || n[1])
 	{
 		if ((j = ft_find_instr(a, n)) >= 0)
 		{
@@ -170,7 +129,7 @@ void	ft_smart_sort(int *a[2], int n[2], t_list **list)
 			ft_apply_isnstr(a, str, n, 0);
 			new->next = ft_lstnew(str, ft_strlen(str) + 1);
 		}
-		else if (!ft_issorted(a[0], n[0], 2) && (j = -1))
+		else if (!ft_issort(a[0], n[0], 2) && (j = -1))
 			ft_mov_n_psuh(a, n, &new, 1);
 		else
 		{

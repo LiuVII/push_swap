@@ -16,6 +16,31 @@
 **Still need error checker for input: numbers, out of integer range
 */
 
+int		ft_strcheck(const char *str)
+{
+	int			sign;
+	long		num;
+
+	sign = 1;
+	num = 0;
+	if (*str == '+' || *str == '-')
+	{
+		sign = 44 - *str;
+		str++;
+	}
+	while (*str >= '0' && *str <= '9')
+	{
+		num *= 10;
+		num += *str - '0';
+		str++;
+		if (num + (sign - 1) / 2 > INT_MAX)
+			return (0);
+	}
+	if (*str)
+		return (0);
+	return (1);
+}
+
 int		ft_arrcheck(int *a, int n)
 {
 	int		i;
@@ -32,20 +57,36 @@ int		ft_arrcheck(int *a, int n)
 	return (1);
 }
 
-void	ft_lstprint(t_list *list)
+int		*ft_atoi_tab(char **tab, int *len, int mode)
 {
-	t_list *tmp;
+	int		i;
+	int		*itab;
 
-	tmp = list;
-	while (tmp)
+	if (!tab)
+		return (0);
+	i = 0;
+	while (tab[i])
+		i++;
+	*len = i;
+	itab = NULL;
+	if (!(itab = (int*)malloc(sizeof(int) * (*len))))
 	{
-		(tmp->content) ? ft_putstr(tmp->content) : 0;
-		ft_putstr("\n");
-		tmp = tmp->next;
+		(mode) ? ft_mapfree(&tab) : 0;
+		return (0);
 	}
+	i = -1;
+	while (++i < *len)
+	{
+		if (!ft_strcheck(tab[i]))
+			return (0);
+		itab[i] = ft_atoi(tab[i]);
+		(mode) ? free(tab[i]) : 0;
+	}
+	(mode) ? free(tab) : 0;
+	return (itab);
 }
 
-int		ft_issorted(int *arr, int n, int order)
+int		ft_issort(int *arr, int n, int order)
 {
 	int		i;
 
@@ -71,33 +112,4 @@ int		ft_issorted(int *arr, int n, int order)
 		if (arr[i] < arr[i + 1])
 			return (0);
 	return (1);
-}
-
-void	ft_apply_isnstr(int *a[2], char *line, int n[2], int debug)
-{
-	if (!ft_strcmp(line, "ss") || !ft_strcmp(line, "sa") || !ft_strcmp(line, "sb"))
-	{
-		(n[0] > 1 && ft_strcmp(line, "sb")) ? ft_swap(&a[0][0], &a[0][1]) : 0;
-		(n[1] > 1 && ft_strcmp(line, "sa")) ? ft_swap(&a[1][0], &a[1][1]) : 0;
-	}
-	if (!ft_strcmp(line, "rr") || !ft_strcmp(line, "ra") || !ft_strcmp(line, "rb"))
-	{
-		(ft_strcmp(line, "rb")) ? ft_rot(a[0], n[0], 1) : 0;
-		(ft_strcmp(line, "ra")) ? ft_rot(a[1], n[1], 1) : 0;
-	}	
-	(!ft_strcmp(line, "pb")) ? ft_push(a[0], a[1], &n[0], &n[1]) : 0;
-	(!ft_strcmp(line, "pa")) ? ft_push(a[1], a[0], &n[1], &n[0]) : 0;
-	if (!ft_strcmp(line, "rrr") || !ft_strcmp(line, "rra") || !ft_strcmp(line, "rrb"))
-	{
-		(ft_strcmp(line, "rrb")) ? ft_rot(a[0], n[0], -1) : 0;
-		(ft_strcmp(line, "rra")) ? ft_rot(a[1], n[1], -1) : 0;
-	}
-	if (debug)
-	{
-		ft_putstr(line);
-		ft_putstr(":\nStack A: ");
-		ft_print_arr(a[0], n[0]);
-		ft_putstr("Stack B: ");
-		ft_print_arr(a[1], n[1]);
-	}
 }

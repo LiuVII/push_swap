@@ -18,7 +18,8 @@ FUNC1		=	checker.c
 
 FUNCS		+=	sorts.c\
 				psw_op.c\
-				add_check.c
+				add_check.c\
+				get_op.c
 
 LIBFT		=	./libft/libft.a
 LIBINC		=	-I./libft
@@ -35,7 +36,7 @@ OBJS_DIR	=	./build/
 
 .PHONY: all clean fclean re
 
-all: $(LIBFT) $(NAME)
+all: $(NAME)
 
 build:
 	@mkdir -p $(OBJS_DIR)
@@ -48,7 +49,7 @@ $(OBJS_DIR)%.o: %.c | build
 $(LIBFT):
 	@make -C ./libft
 
-$(NAME): $(OBJS)
+$(NAME): $(LIBFT) $(OBJS) $(OBJ0) $(OBJ1)
 	@$(CC) -o $(NAME) $(OBJ0) $(OBJS) $(LIBLINK)
 	@$(CC) -o $(NAME1) $(OBJ1) $(OBJS) $(LIBLINK)
 
