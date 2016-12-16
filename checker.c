@@ -92,6 +92,6 @@ int		main(int ac, char **av)
 		free(line);
 	}
 	(ft_issort(a[0], n[0], 1) && !n[1]) ? ft_putstr("OK\n") : ft_putstr("KO\n");
-	ft_free_n_exit(a, NULL, 0);
+	ft_free_n_exit(a, line, 0);
 	return (0);
 }

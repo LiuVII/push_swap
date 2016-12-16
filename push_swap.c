@@ -35,7 +35,7 @@ int		*read_from_file(int flag, char *filename, int *n)
 	if (fd < 0)
 		ft_free_n_exit(NULL, NULL, NULL, 1);
 	if (get_next_line(fd, &line) < 0)
-		ft_free_n_exit(NULL, NULL, NULL, 1);
+		ft_free_n_exit(NULL, line, NULL, 1);
 	if (fd > 0 && close(fd) < 0)
 		ft_free_n_exit(NULL, line, NULL, 1);
 	arr = ft_atoi_tab(ft_strsplit(line, ' '), n, 1);

@@ -34,6 +34,10 @@ OBJS		=	$(addprefix $(OBJS_DIR), $(FUNCS:.c=.o))
 INC_DIR		=	./includes/
 OBJS_DIR	=	./build/
 
+ifdef ALLOCWRAP
+	LDFLAGS += ./alloc_wrap.c -ldl
+endif 
+
 .PHONY: all clean fclean re
 
 all: $(NAME)
@@ -50,8 +54,8 @@ $(LIBFT):
 	@make -C ./libft
 
 $(NAME): $(LIBFT) $(OBJS) $(OBJ0) $(OBJ1)
-	@$(CC) -o $(NAME) $(OBJ0) $(OBJS) $(LIBLINK)
-	@$(CC) -o $(NAME1) $(OBJ1) $(OBJS) $(LIBLINK)
+	@$(CC) $(CFLAGS) $(LDFLAGS) -o $(NAME) $(OBJ0) $(OBJS) $(LIBLINK)
+	@$(CC) $(CFLAGS) $(LDFLAGS) -o $(NAME1) $(OBJ1) $(OBJS) $(LIBLINK)
 
 clean:
 	@/bin/rm -rf $(OBJS_DIR)
